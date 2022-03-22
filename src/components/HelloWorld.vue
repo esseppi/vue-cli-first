@@ -5,9 +5,9 @@
         <v-row v-for="(value, id) in coins" :key="value.id">
           <v-col>
             <div>{{ id }}</div>
-          </v-col>
-          <v-col>
-            <div>{{ value.USD.PRICE }}</div>
+            <div>{{ value.id }}</div>
+            <img :src="value.image.large">
+            <div>{{ value.market_data.current_price.usd }}</div>
           </v-col>
         </v-row>
       </v-col>
@@ -20,26 +20,19 @@ import axios from "axios"
 export default {
   name: 'HelloWorld',
   data: () => ({
-    activeCoin: '',
     coins:[],
     errors: [],
   }),
   methods: {
-    convert() {
-      this.result = this.value.USD.PRICE * this.amount
-    },
 
   },
   created() {
-    axios.get('https://min-api.cryptocompare.com/data/pricemultifull?fsyms=LUNA,DOT,ETH,BTC&tsyms=USD')
+    axios.get('https://api.coingecko.com/api/v3/coins/')
     .then(response => {
-      this.coins = response.data.DISPLAY
-      // this.eth = response.data.DISPLAY.ETH.USD
-      // this.btc = response.data.DISPLAY.BTC.USD
-      // this.dot = response.data.DISPLAY.DOT.USD
-      // this.luna = response.data.DISPLAY.LUNA.USD
+      this.coins = response.data
+    }).catch(e => {
+      this.errors.push(e)
     })
-
   }
 }
 
